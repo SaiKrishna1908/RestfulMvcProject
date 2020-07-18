@@ -1,6 +1,8 @@
 package com.restful.mvc.controller;
 
 import com.restful.mvc.api.v1.model.CustomerDTO;
+import com.restful.mvc.api.v1.model.CustomerListDTO;
+import com.restful.mvc.domain.Customer;
 import com.restful.mvc.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,26 +13,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customers/")
+@RequestMapping(CustomerController.base_url)
 
-//TODO : Write Test's for Controller's
+//TODO : Implement Put Endpoint
 public class CustomerController {
 
     private final CustomerService customerService;
-    private static final String base_url = "/api/v1/customers/";
+    static final String base_url = "/api/v1/customers/";
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CustomerDTO>> getCustomers(){
+    public ResponseEntity<CustomerListDTO> getCustomers(){
 
-        List<CustomerDTO> customerDTOS = customerService.getAllCustomers();
-
-        customerDTOS.forEach(customerDTO -> customerDTO.setCustomer_url(base_url+customerDTO.getId()));
-
-        return new ResponseEntity<List<CustomerDTO>>(customerDTOS, HttpStatus.OK);
+        CustomerListDTO customerListDTO = new CustomerListDTO(customerService.getAllCustomers());
+        return new ResponseEntity<CustomerListDTO>(customerListDTO, HttpStatus.OK);
     }
 
     @PostMapping(value = "/",

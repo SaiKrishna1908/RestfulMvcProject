@@ -6,6 +6,7 @@ import com.restful.mvc.api.v1.model.CategoryDTO;
 import com.restful.mvc.api.v1.model.CustomerDTO;
 import com.restful.mvc.domain.Customer;
 import com.restful.mvc.repository.CustomerRepository;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -84,26 +85,13 @@ class CustomerServiceImplTest {
         assertEquals(johnny.getLastname(), savedCustomer.getLastname());
     }
 
+
     @Test
     public void deleteCustomerById() {
         //given
 
-        Customer customer = new Customer();
-        customer.setFirstname(FIRSTNAME1);
-        customer.setLastname(LASTNAME1);
-        customer.setId(ID1);
-
-        Customer customer1 = new Customer();
-        customer1.setId(ID2);
-        customer1.setLastname(LASTNAME2);
-        customer1.setFirstname(FIRSTNAME2);
-
-        List<Customer> customers = new ArrayList<>();
-        customers.add(customer);
-        customers.add(customer1);
-
-
-
+        customerService.deleteCustomerById(1L);
+        verify(customerRepository, times(1)).deleteById(anyLong());
     }
 
     @Test
@@ -139,7 +127,7 @@ class CustomerServiceImplTest {
         ).thenReturn(johnny);
 
         CustomerDTO customerDTO = customerService.getCustomerById(1L);
-        verify(customerRepository, times(2));
+        verify(customerRepository, times(1)).findById(anyLong());
 
 
     }
