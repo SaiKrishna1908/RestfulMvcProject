@@ -70,7 +70,7 @@ class CustomerControllerTest {
         customers.add(sherry);
 
         when(customerService.getAllCustomers()).thenReturn(customers);
-        mockMvc.perform(get(base_url+"/", MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+        mockMvc.perform(get(base_url+"/", MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers",hasSize(2)));
 
     }
@@ -84,7 +84,9 @@ class CustomerControllerTest {
 
         when(customerService.postCustomer(any())).thenReturn(customerDTO);
 
-        mockMvc.perform(post(base_url+"/").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(base_url+"/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)) )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname",equalTo(FIRSTNAME)));
@@ -110,8 +112,9 @@ class CustomerControllerTest {
         when(customerService.editCustomer(anyLong(), any())).thenReturn(edited);
 
         mockMvc.perform(put(base_url+"2").contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(customerDTO))).andExpect(status().isOk())
-        .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME1)))
-        .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)));
+                .accept(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME1)))
+                .andExpect(jsonPath("$.lastname", equalTo(LASTNAME)));
     }
 }
